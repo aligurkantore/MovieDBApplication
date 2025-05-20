@@ -11,6 +11,7 @@ import com.example.moviedbapplication.common.util.FailViewType
 import com.example.moviedbapplication.domain.model.home.movienowplaying.MovieNowPlayingUI
 import com.example.moviedbapplication.domain.model.home.movietoprated.MovieTopRatedUI
 import com.example.moviedbapplication.domain.usecase.home.movienowplaying.MovieNowPlayingUseCase
+import com.example.moviedbapplication.domain.usecase.home.moviepopular.MoviePopularUseCase
 import com.example.moviedbapplication.domain.usecase.home.movietoprated.MovieTopRatedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,12 +20,14 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val movieNowPlayingUseCase: MovieNowPlayingUseCase,
-    private val movieTopRatedUseCase: MovieTopRatedUseCase
+    private val movieTopRatedUseCase: MovieTopRatedUseCase,
+    private val moviePopularUseCase: MoviePopularUseCase
 ) : BaseViewModel<HomeEvent, HomeState, HomeEffect>() {
 
     init {
         getNowPlaying()
         getTopRated()
+        getPopular()
     }
 
     override fun setInitialState() = HomeState()
@@ -39,17 +42,31 @@ class HomeViewModel @Inject constructor(
 
     private fun getNowPlaying() {
         viewModelScope.launch {
-            movieNowPlayingUseCase().cachedIn(viewModelScope).collect { resource ->
-                setState { copy(nowPlaying = resource) }
-            }
+            movieNowPlayingUseCase()
+                .cachedIn(viewModelScope)
+                .collect { resource ->
+                    setState { copy(nowPlaying = resource) }
+                }
         }
     }
 
     private fun getTopRated() {
         viewModelScope.launch {
-            movieTopRatedUseCase().cachedIn(viewModelScope).collect { resource ->
-                setState { copy(topRated = resource) }
-            }
+            movieTopRatedUseCase()
+                .cachedIn(viewModelScope)
+                .collect { resource ->
+                    setState { copy(topRated = resource) }
+                }
+        }
+    }
+
+    private fun getPopular() {
+        viewModelScope.launch {
+            moviePopularUseCase()
+                .cachedIn(viewModelScope)
+                .collect { resource ->
+                    setState { copy(popular = resource) }
+                }
         }
     }
 
@@ -62,7 +79,8 @@ sealed interface HomeEvent : Event {
 data class HomeState(
     val isLoading: Boolean = false,
     val nowPlaying: PagingData<MovieNowPlayingUI>? = null,
-    val topRated: PagingData<MovieTopRatedUI>? = null
+    val topRated: PagingData<MovieTopRatedUI>? = null,
+    val popular: PagingData<MovieNowPlayingUI>? = null
 ) : State
 
 sealed interface HomeEffect : Effect {

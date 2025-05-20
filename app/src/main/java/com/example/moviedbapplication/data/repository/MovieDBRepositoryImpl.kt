@@ -31,6 +31,14 @@ class MovieDBRepositoryImpl (
         }
     }
 
+    override suspend fun getPopular(): Flow<PagingData<MovieNowPlayingItem>> {
+        return safeApiCallPaging { page, pageSize ->
+            safeApiCall { service.getPopularList() }.onSuccess { response ->
+                response.movieNowPlayingItems
+            }
+        }
+    }
+
     override suspend fun getMovieDetails(movieId: String) = safeApiCall {
         service.getMovieDetail(movieId)
     }

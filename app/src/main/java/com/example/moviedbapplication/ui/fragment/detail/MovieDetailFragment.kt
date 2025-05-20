@@ -1,8 +1,8 @@
 package com.example.moviedbapplication.ui.fragment.detail
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.moviedbapplication.common.base.BaseFragment
@@ -29,6 +29,7 @@ class MovieDetailFragment :
     override fun bindScreen() {
         viewModel.getDetail(args.movieId)
         collectState()
+        collectEffect()
     }
 
     private fun collectState() {
@@ -42,6 +43,19 @@ class MovieDetailFragment :
                     textTitle.text = detail.title
                     textOverview.text = detail.overview
                 }
+            }
+        }
+    }
+
+    private fun collectEffect() {
+        viewModel.effect.collectIn(viewLifecycleOwner) { effect ->
+            when (effect) {
+                is MovieDetailEffect.ShowFail -> {
+                    Toast.makeText(requireContext(), getString(effect.message), Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                is MovieDetailEffect.GoToBack -> {}
             }
         }
     }

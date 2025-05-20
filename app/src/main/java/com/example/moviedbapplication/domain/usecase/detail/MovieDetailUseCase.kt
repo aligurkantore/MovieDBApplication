@@ -1,4 +1,4 @@
-package com.example.moviedbapplication.domain.usecase.home.detail
+package com.example.moviedbapplication.domain.usecase.detail
 
 import com.example.moviedbapplication.common.util.onSuccess
 import com.example.moviedbapplication.domain.mapper.toUI

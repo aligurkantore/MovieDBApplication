@@ -8,7 +8,7 @@ import com.example.moviedbapplication.common.base.State
 import com.example.moviedbapplication.common.util.FailViewType
 import com.example.moviedbapplication.common.util.Resource
 import com.example.moviedbapplication.domain.model.home.detail.MovieDetailUI
-import com.example.moviedbapplication.domain.usecase.home.detail.MovieDetailUseCase
+import com.example.moviedbapplication.domain.usecase.detail.MovieDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onCompletion

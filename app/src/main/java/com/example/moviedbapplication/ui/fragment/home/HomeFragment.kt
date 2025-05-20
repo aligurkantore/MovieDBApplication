@@ -13,6 +13,7 @@ import com.example.moviedbapplication.common.extensions.collectIn
 import com.example.moviedbapplication.common.extensions.navigateSafe
 import com.example.moviedbapplication.databinding.FragmentHomeBinding
 import com.example.moviedbapplication.ui.fragment.home.homeadapter.MovieNowPlayingAdapter
+import com.example.moviedbapplication.ui.fragment.home.homeadapter.MoviePopularAdapter
 import com.example.moviedbapplication.ui.fragment.home.homeadapter.MovieTopRatedAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -27,6 +28,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeEvent, HomeState, Hom
     }
 
     private val topRatedAdapter = MovieTopRatedAdapter { id ->
+        viewModel.setEvent(HomeEvent.MovieClicked(id))
+    }
+
+    private val popularAdapter = MoviePopularAdapter { id ->
         viewModel.setEvent(HomeEvent.MovieClicked(id))
     }
 
@@ -46,8 +51,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeEvent, HomeState, Hom
                 false
             )
 
-            recyclerTopRated.adapter = topRatedAdapter
-            recyclerTopRated.layoutManager = GridLayoutManager(context, 2)
+
+
+            recyclerPopular.adapter = popularAdapter
+            recyclerPopular.layoutManager = GridLayoutManager(context,2)
         }
 
         collectState()
@@ -66,6 +73,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeEvent, HomeState, Hom
             state.topRated?.let { topRated ->
                 lifecycleScope.launch {
                     topRatedAdapter.submitData(topRated)
+                }
+            }
+
+            state.popular?.let { popular ->
+                lifecycleScope.launch {
+                    popularAdapter.submitData(popular)
                 }
             }
         }
@@ -95,9 +108,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeEvent, HomeState, Hom
         binding.apply {
             recyclerNowPlaying.adapter = null
             recyclerTopRated.adapter = null
+            recyclerPopular.adapter = null
         }
         super.onDestroyView()
     }
-
-
 }

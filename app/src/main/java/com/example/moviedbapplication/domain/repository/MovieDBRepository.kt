@@ -13,5 +13,7 @@ interface MovieDBRepository {
 
     suspend fun getTopRated(): Flow<PagingData<MovietopRatedItem>>
 
+    suspend fun getPopular(): Flow<PagingData<MovieNowPlayingItem>>
+
     suspend fun getMovieDetails(movieId: String): Resource<MovieDetailResponse>
 }

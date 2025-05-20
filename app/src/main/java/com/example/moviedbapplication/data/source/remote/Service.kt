@@ -22,6 +22,11 @@ interface Service {
         @Header("Authorization") token: String = BEARER_TOKEN
     ): Response<MovieTopRatedResponse>
 
+    @GET("movie/popular")
+    suspend fun getPopularList(
+        @Header("Authorization") token: String = BEARER_TOKEN
+        ): Response<MovieNowPlayingResponse>
+
     @GET("movie/{movieId}")
     suspend fun getMovieDetail(
         @Path("movieId") movieId: String,
